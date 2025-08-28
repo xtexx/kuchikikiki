@@ -30,7 +30,7 @@ pub use tree::{Doctype, DocumentData, ElementData, Node, NodeData, NodeRef};
 /// It can be used with:
 ///
 /// ```rust
-/// use kuchikiki::traits::*;
+/// use kuchikikiki::traits::*;
 /// ```
 pub mod traits {
     pub use crate::iter::{ElementIterator, NodeIterator};
