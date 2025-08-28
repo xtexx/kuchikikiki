@@ -1,6 +1,84 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>brave/renovate-config"
-  ]
+    "config:recommended",
+    "helpers:pinGitHubActionDigestsToSemver",
+    ":pinDevDependencies"
+  ],
+  "branchNameStrict": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "major",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest"
+      ],
+      "minimumReleaseAge": "7 days",
+      "schedule": [
+        "* * * * 2-4"
+      ]
+    },
+    {
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor",
+        "pin",
+        "pinDigest",
+        "digest"
+      ],
+      "matchCurrentAge": "> 2 weeks",
+      "matchDepNames": [
+        "cssparser",
+        "html5ever",
+        "selectors",
+        "indexmap"
+      ],
+      "autoApprove": true,
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor",
+        "pin",
+        "pinDigest",
+        "digest"
+      ],
+      "matchCurrentAge": "> 2 weeks",
+      "matchRepositories": [
+        "actions/**",
+        "github/**",
+        "Swatinem/rust-cache",
+        "actions-rs/audit-check"
+      ],
+      "autoApprove": true,
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "reviewers": [
+    "xtexx"
+  ],
+  "abandonmentThreshold": "2 years"
 }
