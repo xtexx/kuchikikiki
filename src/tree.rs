@@ -1,5 +1,5 @@
-use html5ever::tree_builder::QuirksMode;
 use html5ever::QualName;
+use html5ever::tree_builder::QuirksMode;
 use std::cell::{Cell, RefCell};
 use std::fmt;
 use std::ops::Deref;
@@ -381,20 +381,20 @@ impl Node {
             next_sibling_ref
                 .previous_sibling
                 .replace(previous_sibling_weak);
-        } else if let Some(parent_ref) = parent_weak.as_ref() {
-            if let Some(parent_strong) = parent_ref.upgrade() {
-                parent_strong.last_child.replace(previous_sibling_weak);
-            }
+        } else if let Some(parent_ref) = parent_weak.as_ref()
+            && let Some(parent_strong) = parent_ref.upgrade()
+        {
+            parent_strong.last_child.replace(previous_sibling_weak);
         }
 
         if let Some(previous_sibling_strong) = previous_sibling_opt {
             previous_sibling_strong
                 .next_sibling
                 .replace(next_sibling_strong);
-        } else if let Some(parent_ref) = parent_weak.as_ref() {
-            if let Some(parent_strong) = parent_ref.upgrade() {
-                parent_strong.first_child.replace(next_sibling_strong);
-            }
+        } else if let Some(parent_ref) = parent_weak.as_ref()
+            && let Some(parent_strong) = parent_ref.upgrade()
+        {
+            parent_strong.first_child.replace(next_sibling_strong);
         }
     }
 }
@@ -406,13 +406,13 @@ impl NodeRef {
     pub fn append(&self, new_child: NodeRef) {
         new_child.detach();
         new_child.parent.replace(Some(Rc::downgrade(&self.0)));
-        if let Some(last_child_weak) = self.last_child.replace(Some(Rc::downgrade(&new_child.0))) {
-            if let Some(last_child) = last_child_weak.upgrade() {
-                new_child.previous_sibling.replace(Some(last_child_weak));
-                debug_assert!(last_child.next_sibling.is_none());
-                last_child.next_sibling.replace(Some(new_child.0));
-                return;
-            }
+        if let Some(last_child_weak) = self.last_child.replace(Some(Rc::downgrade(&new_child.0)))
+            && let Some(last_child) = last_child_weak.upgrade()
+        {
+            new_child.previous_sibling.replace(Some(last_child_weak));
+            debug_assert!(last_child.next_sibling.is_none());
+            last_child.next_sibling.replace(Some(new_child.0));
+            return;
         }
         debug_assert!(self.first_child.is_none());
         self.first_child.replace(Some(new_child.0));
@@ -471,15 +471,14 @@ impl NodeRef {
         if let Some(previous_sibling_weak) = self
             .previous_sibling
             .replace(Some(Rc::downgrade(&new_sibling.0)))
+            && let Some(previous_sibling) = previous_sibling_weak.upgrade()
         {
-            if let Some(previous_sibling) = previous_sibling_weak.upgrade() {
-                new_sibling
-                    .previous_sibling
-                    .replace(Some(previous_sibling_weak));
-                debug_assert!(previous_sibling.next_sibling().unwrap() == *self);
-                previous_sibling.next_sibling.replace(Some(new_sibling.0));
-                return;
-            }
+            new_sibling
+                .previous_sibling
+                .replace(Some(previous_sibling_weak));
+            debug_assert!(previous_sibling.next_sibling().unwrap() == *self);
+            previous_sibling.next_sibling.replace(Some(new_sibling.0));
+            return;
         }
         if let Some(parent) = self.parent() {
             debug_assert!(parent.first_child().unwrap() == *self);

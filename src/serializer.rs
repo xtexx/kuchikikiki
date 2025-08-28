@@ -1,6 +1,6 @@
-use html5ever::serialize::TraversalScope::*;
-use html5ever::serialize::{serialize, Serialize, SerializeOpts, Serializer, TraversalScope};
 use html5ever::QualName;
+use html5ever::serialize::TraversalScope::*;
+use html5ever::serialize::{Serialize, SerializeOpts, Serializer, TraversalScope, serialize};
 use std::fmt;
 use std::fs::File;
 use std::io;

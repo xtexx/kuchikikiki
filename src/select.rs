@@ -14,7 +14,7 @@ use selectors::parser::SelectorParseErrorKind;
 use selectors::parser::{
     NonTSPseudoClass, Parser, Selector as GenericSelector, SelectorImpl, SelectorList,
 };
-use selectors::{self, matching, OpaqueElement};
+use selectors::{self, OpaqueElement, matching};
 use std::fmt;
 
 /// The definition of whitespace per CSS Selectors Level 3 § 4.
@@ -262,9 +262,7 @@ impl selectors::Element for NodeDataRef<ElementData> {
         self.attributes
             .borrow()
             .get(local_name!("id"))
-            .map_or(false, |id_attr| {
-                case_sensitivity.eq(id.as_bytes(), id_attr.as_bytes())
-            })
+            .is_some_and(|id_attr| case_sensitivity.eq(id.as_bytes(), id_attr.as_bytes()))
     }
 
     #[inline]
@@ -296,7 +294,7 @@ impl selectors::Element for NodeDataRef<ElementData> {
             NamespaceConstraint::Specific(ns_url) => attrs
                 .map
                 .get(&ExpandedName::new(ns_url, local_name.clone()))
-                .map_or(false, |attr| operation.eval_str(&attr.value)),
+                .is_some_and(|attr| operation.eval_str(&attr.value)),
         }
     }
 

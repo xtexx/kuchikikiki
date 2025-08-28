@@ -143,11 +143,11 @@ impl TreeSink for Sink {
         match child {
             NodeOrText::AppendNode(node) => parent.append(node),
             NodeOrText::AppendText(text) => {
-                if let Some(last_child) = parent.last_child() {
-                    if let Some(existing) = last_child.as_text() {
-                        existing.borrow_mut().push_str(&text);
-                        return;
-                    }
+                if let Some(last_child) = parent.last_child()
+                    && let Some(existing) = last_child.as_text()
+                {
+                    existing.borrow_mut().push_str(&text);
+                    return;
                 }
                 parent.append(NodeRef::new_text(text))
             }
@@ -159,11 +159,11 @@ impl TreeSink for Sink {
         match child {
             NodeOrText::AppendNode(node) => sibling.insert_before(node),
             NodeOrText::AppendText(text) => {
-                if let Some(previous_sibling) = sibling.previous_sibling() {
-                    if let Some(existing) = previous_sibling.as_text() {
-                        existing.borrow_mut().push_str(&text);
-                        return;
-                    }
+                if let Some(previous_sibling) = sibling.previous_sibling()
+                    && let Some(existing) = previous_sibling.as_text()
+                {
+                    existing.borrow_mut().push_str(&text);
+                    return;
                 }
                 sibling.insert_before(NodeRef::new_text(text))
             }
