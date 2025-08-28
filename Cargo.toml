@@ -17,7 +17,7 @@ edition = "2024"
 name = "kuchikikiki"
 
 [dependencies]
-cssparser = "0.27"
+cssparser = "0.35"
 html5ever = "0.27.0"
 selectors = "0.22"
 indexmap = "2.2.6"
