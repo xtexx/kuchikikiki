@@ -11,7 +11,7 @@ authors = [
 license = "MIT"
 description = "HTML tree manipulation library"
 repository = "https://github.com/xtexx/kuchikikiki"
-edition = "2018"
+edition = "2024"
 
 [lib]
 name = "kuchikikiki"

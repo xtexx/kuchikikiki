@@ -1,5 +1,5 @@
 use html5ever::{LocalName, Namespace, Prefix};
-use indexmap::{map::Entry, IndexMap};
+use indexmap::{IndexMap, map::Entry};
 
 /// Convenience wrapper around a indexmap that adds method for attributes in the null namespace.
 #[derive(Debug, PartialEq, Clone)]
@@ -57,7 +57,10 @@ impl Attributes {
     }
 
     /// Like IndexMap::entry
-    pub fn entry<A: Into<LocalName>>(&mut self, local_name: A) -> Entry<ExpandedName, Attribute> {
+    pub fn entry<A: Into<LocalName>>(
+        &'_ mut self,
+        local_name: A,
+    ) -> Entry<'_, ExpandedName, Attribute> {
         self.map.entry(ExpandedName::new(ns!(), local_name))
     }
 
