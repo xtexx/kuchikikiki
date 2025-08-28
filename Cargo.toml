@@ -23,4 +23,4 @@ selectors = "0.22"
 indexmap = "2.2.6"
 
 [dev-dependencies]
-tempfile = "3"
+tempfile = "=3.21.0"
