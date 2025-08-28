@@ -1,18 +1,20 @@
 [package]
-name = "kuchikiki"
+name = "kuchikikiki"
 version = "0.8.2"
 authors = [
+  "mwbot-rs Authors",
+  "xtex <xtex@cnuser.wiki>",
   "Brave Authors",
   "Ralph Giles <rgiles@brave.com>",
   "Simon Sapin <simon.sapin@exyr.org>",
 ]
 license = "MIT"
-description = "(口利き) HTML tree manipulation library"
-repository = "https://github.com/brave/kuchikiki"
+description = "HTML tree manipulation library"
+repository = "https://github.com/xtexx/kuchikikiki"
 edition = "2018"
 
 [lib]
-name = "kuchikiki"
+name = "kuchikikiki"
 
 [dependencies]
 cssparser = "0.27"
