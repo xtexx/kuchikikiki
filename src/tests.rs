@@ -207,3 +207,26 @@ fn specificity() {
     assert!(specificities[0] > specificities[2]);
     assert!(specificities[1] > specificities[2]);
 }
+
+#[test]
+fn css_child_selector() {
+    let html = r"
+<title>Test case</title>
+<div>
+Test text
+<p class=foo>Foo</p>
+<p class=bar>Bar</p>
+</div>
+";
+
+    let document = parse_html().one(html);
+    let matching = document.select_first("p:first-child").unwrap();
+    println!("{:?}", matching);
+    assert_eq!(matching.attributes.borrow().get("class"), Some("foo"));
+
+    assert!(document.select_first("p:not(.foo):first-child").is_err());
+
+    let matching = document.select_first("p:last-child").unwrap();
+    println!("{:?}", matching);
+    assert_eq!(matching.attributes.borrow().get("class"), Some("bar"));
+}

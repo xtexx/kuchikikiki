@@ -160,6 +160,25 @@ impl<'i> Parser<'i> for KuchikiParser {
             )
         }
     }
+
+    fn parse_pseudo_element(
+        &self,
+        location: SourceLocation,
+        name: CowRcStr<'i>,
+    ) -> Result<<Self::Impl as SelectorImpl>::PseudoElement, ParseError<'i, Self::Error>> {
+        use self::PseudoElement::*;
+        if name.eq_ignore_ascii_case("first-child") {
+            Ok(FirstChild)
+        } else if name.eq_ignore_ascii_case("last-child") {
+            Ok(LastChild)
+        } else {
+            Err(
+                location.new_custom_error(SelectorParseErrorKind::UnsupportedPseudoClassOrElement(
+                    name,
+                )),
+            )
+        }
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Debug, Hash)]
@@ -212,19 +231,32 @@ impl ToCss for PseudoClass {
 }
 
 #[derive(PartialEq, Eq, Clone, Debug, Hash)]
-pub enum PseudoElement {}
+pub enum PseudoElement {
+    FirstChild,
+    LastChild,
+}
 
 impl ToCss for PseudoElement {
-    fn to_css<W>(&self, _dest: &mut W) -> fmt::Result
+    fn to_css<W>(&self, dest: &mut W) -> fmt::Result
     where
         W: fmt::Write,
     {
-        match *self {}
+        dest.write_str(match *self {
+            PseudoElement::FirstChild => "first-child",
+            PseudoElement::LastChild => "last-child",
+        })
     }
 }
 
 impl selectors::parser::PseudoElement for PseudoElement {
     type Impl = KuchikiSelectors;
+
+    fn is_element_backed(&self) -> bool {
+        match *self {
+            PseudoElement::FirstChild => true,
+            PseudoElement::LastChild => true,
+        }
+    }
 }
 
 impl selectors::Element for NodeDataRef<ElementData> {
@@ -372,7 +404,18 @@ impl selectors::Element for NodeDataRef<ElementData> {
         pseudo: &PseudoElement,
         _context: &mut matching::MatchingContext<KuchikiSelectors>,
     ) -> bool {
-        match *pseudo {}
+        match *pseudo {
+            PseudoElement::FirstChild => self
+                .as_node()
+                .parent()
+                .map(|parent| parent.first_child().as_ref() == Some(self.as_node()))
+                .unwrap_or(false),
+            PseudoElement::LastChild => self
+                .as_node()
+                .parent()
+                .map(|parent| parent.last_child().as_ref() == Some(self.as_node()))
+                .unwrap_or(false),
+        }
     }
 
     fn match_non_ts_pseudo_class(
@@ -397,7 +440,9 @@ impl selectors::Element for NodeDataRef<ElementData> {
     }
 
     fn first_element_child(&self) -> Option<Self> {
-        None
+        self.as_node()
+            .first_child()
+            .and_then(NodeRef::into_element_ref)
     }
 
     fn apply_selector_flags(&self, _flags: matching::ElementSelectorFlags) {}
