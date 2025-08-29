@@ -1,9 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## unreleased
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+New release from the mwbot-rs maintainers, renamed to `kuchikikiki`.
+It should be semver-compatible with the old [kuchiki](https://github.com/kuchiki-rs/kuchiki) crate.
+
+- Update to Rust edition 2024
+- Address Clippy warnings
+- Bump dependencies to latest
+- Support `:first-child` and `:last-child` CSS pseudo element
 
 ## v0.8.2 (2023-05-15)
 
