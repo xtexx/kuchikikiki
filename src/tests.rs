@@ -216,6 +216,7 @@ fn css_child_selector() {
 Test text
 <p class=foo>Foo</p>
 <p class=bar>Bar</p>
+Test text
 </div>
 ";
 
