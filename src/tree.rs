@@ -1,3 +1,4 @@
+use bitflags::bitflags;
 use html5ever::QualName;
 use html5ever::tree_builder::QuirksMode;
 use std::cell::{Cell, RefCell};
@@ -484,5 +485,51 @@ impl NodeRef {
             debug_assert!(parent.first_child().unwrap() == *self);
             parent.first_child.replace(Some(new_sibling.0));
         }
+    }
+}
+
+bitflags! {
+    /// Set of flags that describes the semantics of equality of nodes.
+    #[derive(Clone, Copy)]
+    pub struct NodeEqFlags: usize {
+        /// Two nodes strictly have the same data, but may have different children.
+        const SAME_DATA = 1 << 0;
+        /// Two nodes have the same children.
+        const SAME_CHILDREN = 1 << 1;
+        /// Two nodes have the same siblings, comparing siblings with the same flags.
+        const SAME_SIBLINGS = 1 << 2;
+
+        /// Two nodes strictly have the same contents, comparing data and children.
+        const SAME_CONTENT = Self::SAME_DATA.bits() | Self::SAME_CHILDREN.bits();
+    }
+}
+
+impl Node {
+    /// Compares if two nodes are equal.
+    pub fn extended_eq(&self, other: &Self, flags: NodeEqFlags) -> bool {
+        if flags.contains(NodeEqFlags::SAME_DATA) && self.data != other.data {
+            return false;
+        }
+        if flags.contains(NodeEqFlags::SAME_CHILDREN) {
+            match (
+                self.first_child.clone_inner(),
+                other.first_child.clone_inner(),
+            ) {
+                (None, None) => {}
+                (Some(a), Some(b)) if a.extended_eq(&b, flags | NodeEqFlags::SAME_SIBLINGS) => {}
+                _ => return false,
+            }
+        }
+        if flags.contains(NodeEqFlags::SAME_SIBLINGS) {
+            match (
+                self.next_sibling.clone_inner(),
+                other.next_sibling.clone_inner(),
+            ) {
+                (None, None) => {}
+                (Some(a), Some(b)) if a.extended_eq(&b, flags) => {}
+                _ => return false,
+            }
+        }
+        true
     }
 }

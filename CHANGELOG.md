@@ -9,6 +9,7 @@ It should be semver-compatible with the old [kuchiki](https://github.com/kuchiki
 - Address Clippy warnings
 - Bump dependencies to latest
 - Support `:first-child` and `:last-child` CSS pseudo element
+- Add `Node::extended_eq` for deep comparing nodes
 
 ## v0.8.2 (2023-05-15)
 

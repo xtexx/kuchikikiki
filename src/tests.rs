@@ -7,6 +7,7 @@ use tempfile::TempDir;
 use crate::parser::{parse_fragment, parse_html};
 use crate::select::*;
 use crate::traits::*;
+use crate::tree::NodeEqFlags;
 
 #[test]
 fn text_nodes() {
@@ -222,12 +223,37 @@ Test text
 
     let document = parse_html().one(html);
     let matching = document.select_first("p:first-child").unwrap();
-    println!("{:?}", matching);
     assert_eq!(matching.attributes.borrow().get("class"), Some("foo"));
 
     assert!(document.select_first("p:not(.foo):first-child").is_err());
 
     let matching = document.select_first("p:last-child").unwrap();
-    println!("{:?}", matching);
     assert_eq!(matching.attributes.borrow().get("class"), Some("bar"));
+}
+
+#[test]
+fn node_eq() {
+    let html = r"
+<title>Test case</title>
+<div class=test1><div>Foo</div><div>Bar</div></div>
+<div class=test2><div>Foo</div><div>Foo</div></div>
+";
+
+    let document = parse_html().one(html);
+
+    let container = document.select_first(".test1").unwrap();
+    assert!(!container.as_node().first_child().unwrap().extended_eq(
+        &container.as_node().last_child().unwrap(),
+        NodeEqFlags::SAME_CONTENT
+    ));
+    assert!(container.as_node().first_child().unwrap().extended_eq(
+        &container.as_node().last_child().unwrap(),
+        NodeEqFlags::SAME_DATA
+    ));
+
+    let container = document.select_first(".test2").unwrap();
+    assert!(container.as_node().first_child().unwrap().extended_eq(
+        &container.as_node().last_child().unwrap(),
+        NodeEqFlags::SAME_CONTENT
+    ));
 }
