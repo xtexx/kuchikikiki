@@ -1,6 +1,6 @@
 # Changelog
 
-## unreleased
+## v0.9.0 (2025-08-29)
 
 New release from the mwbot-rs maintainers, renamed to `kuchikikiki`.
 It should be semver-compatible with the old [kuchiki](https://github.com/kuchiki-rs/kuchiki) crate.

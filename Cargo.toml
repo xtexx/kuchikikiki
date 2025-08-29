@@ -1,6 +1,6 @@
 [package]
 name = "kuchikikiki"
-version = "0.8.2"
+version = "0.9.0"
 authors = [
   "mwbot-rs Authors",
   "xtex <xtex@cnuser.wiki>",
