@@ -23,7 +23,7 @@ fn main() {
 
         // In this example, as_node represents an HTML node like
         //
-        //   <p class='foo'>Hello world!</p>"
+        //   <p class='foo'>Hello world!</p>
         //
         // Which is distinct from just 'Hello world!'. To get rid of that <p>
         // tag, we're going to get each element's first child, which will be
