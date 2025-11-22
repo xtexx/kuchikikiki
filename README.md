@@ -4,7 +4,8 @@ HTML tree-manipulation library for Rust.
 
 [Documentation](https://docs.rs/kuchikikiki)
 
-Kuchikikiki is a fork of the [Kuchikiki (口利き)](https://github.com/brave/kuchikiki) library, which is now unmaintained.
+Kuchikikiki is a fork of the [Kuchikiki (口利き)](https://github.com/brave/kuchikiki) library,
+which is now not actively maintained.
 The [mwbot-rs](https://www.mediawiki.org/wiki/Mwbot-rs) project is still using a branch,
 and so will continue to support this repository.
 
