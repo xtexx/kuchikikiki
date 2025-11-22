@@ -2,9 +2,6 @@ name: Tests
 
 on:
   push:
-    branches:
-      - main
-      - speedreader
   pull_request:
 
 jobs:

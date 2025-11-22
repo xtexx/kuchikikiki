@@ -2,9 +2,6 @@ name: Lint
 
 on:
   push:
-    branches:
-      - main
-      - speedreader
   pull_request:
   schedule:
     - cron: '28 20 2 * *'
