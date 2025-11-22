@@ -59,7 +59,7 @@
         "actions/**",
         "github/**",
         "Swatinem/rust-cache",
-        "actions-rs/audit-check"
+        "actions-rust-lang/audit"
       ],
       "autoApprove": true,
       "automerge": true
