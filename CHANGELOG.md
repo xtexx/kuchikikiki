@@ -2,6 +2,10 @@
 
 ## unreleased
 
+## v0.9.2 (2026-01-24)
+
+- Update html5ever and selector versions
+
 ## v0.9.1 (2025-11-22)
 
 - Bump dependencies to latest to avoid unmaintained fxhash crate
