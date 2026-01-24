@@ -1,5 +1,11 @@
 # Changelog
 
+## unreleased
+
+## v0.9.1 (2025-11-22)
+
+- Bump dependencies to latest to avoid unmaintained fxhash crate
+
 ## v0.9.0 (2025-08-29)
 
 New release from the mwbot-rs maintainers, renamed to `kuchikikiki`.
