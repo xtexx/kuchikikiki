@@ -18,11 +18,11 @@ name = "kuchikikiki"
 
 [dependencies]
 cssparser = "0.36.0"
-html5ever = "0.36.1"
-selectors = "0.34"
-indexmap = "2.12.1"
+html5ever = "0.38.0"
+selectors = "0.35"
+indexmap = "2.13.0"
 precomputed-hash = "0.1.1"
-crc = "3.3.0"
+crc = "3.4.0"
 bitflags = "2.10.0"
 
 [dev-dependencies]
