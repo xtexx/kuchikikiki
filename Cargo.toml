@@ -3,7 +3,7 @@ name = "kuchikikiki"
 version = "0.11.0"
 authors = [
   "mwbot-rs Authors",
-  "xtex <xtex@cnuser.wiki>",
+  "xtex <xtex@astrafall.org>",
   "Brave Authors",
   "Ralph Giles <rgiles@brave.com>",
   "Simon Sapin <simon.sapin@exyr.org>",
