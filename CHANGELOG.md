@@ -2,6 +2,10 @@
 
 ## unreleased
 
+## v0.11.0 (2026-04-25)
+
+- Update selectors to 0.37
+
 ## v0.9.2 (2026-01-24)
 
 - Update html5ever and selector versions
