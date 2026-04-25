@@ -251,7 +251,7 @@ impl ToCss for PseudoElement {
 impl selectors::parser::PseudoElement for PseudoElement {
     type Impl = KuchikiSelectors;
 
-    fn is_element_backed(&self) -> bool {
+    fn parses_as_element_backed(&self) -> bool {
         match *self {
             PseudoElement::FirstChild => true,
             PseudoElement::LastChild => true,

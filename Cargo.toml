@@ -19,11 +19,11 @@ name = "kuchikikiki"
 [dependencies]
 cssparser = "0.36.0"
 html5ever = "0.39.0"
-selectors = "0.36"
-indexmap = "2.13.0"
+selectors = "0.37"
+indexmap = "2.14.0"
 precomputed-hash = "0.1.1"
 crc = "3.4.0"
-bitflags = "2.11.0"
+bitflags = "2.11.1"
 
 [dev-dependencies]
 tempfile = "=3.27.0"
