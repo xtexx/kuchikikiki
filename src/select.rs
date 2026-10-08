@@ -6,7 +6,7 @@ use crate::attributes::ExpandedName;
 use crate::iter::{NodeIterator, Select};
 use crate::node_data_ref::NodeDataRef;
 use crate::tree::{ElementData, Node, NodeData, NodeRef};
-use cssparser::{self, CowRcStr, ParseError, SourceLocation, ToCss};
+use cssparser::{self, CowRcStr, ParseError, ToCss};
 use html5ever::{LocalName, Namespace};
 use precomputed_hash::PrecomputedHash;
 use selectors::attr::{AttrSelectorOperation, CaseSensitivity, NamespaceConstraint};
@@ -124,13 +124,12 @@ struct KuchikiParser;
 
 impl<'i> Parser<'i> for KuchikiParser {
     type Impl = KuchikiSelectors;
-    type Error = SelectorParseErrorKind<'i>;
+    type Error = SelectorParseErrorKind;
 
     fn parse_non_ts_pseudo_class(
         &self,
-        location: SourceLocation,
         name: CowRcStr<'i>,
-    ) -> Result<PseudoClass, ParseError<'i, SelectorParseErrorKind<'i>>> {
+    ) -> Result<PseudoClass, ParseError<Self::Error>> {
         use self::PseudoClass::*;
         if name.eq_ignore_ascii_case("any-link") {
             Ok(AnyLink)
@@ -153,30 +152,25 @@ impl<'i> Parser<'i> for KuchikiParser {
         } else if name.eq_ignore_ascii_case("indeterminate") {
             Ok(Indeterminate)
         } else {
-            Err(
-                location.new_custom_error(SelectorParseErrorKind::UnsupportedPseudoClassOrElement(
-                    name,
-                )),
-            )
+            Err(ParseError::custom(
+                SelectorParseErrorKind::UnsupportedPseudoClassOrElement,
+            ))
         }
     }
 
     fn parse_pseudo_element(
         &self,
-        location: SourceLocation,
         name: CowRcStr<'i>,
-    ) -> Result<<Self::Impl as SelectorImpl>::PseudoElement, ParseError<'i, Self::Error>> {
+    ) -> Result<<Self::Impl as SelectorImpl>::PseudoElement, ParseError<Self::Error>> {
         use self::PseudoElement::*;
         if name.eq_ignore_ascii_case("first-child") {
             Ok(FirstChild)
         } else if name.eq_ignore_ascii_case("last-child") {
             Ok(LastChild)
         } else {
-            Err(
-                location.new_custom_error(SelectorParseErrorKind::UnsupportedPseudoClassOrElement(
-                    name,
-                )),
-            )
+            Err(ParseError::custom(
+                SelectorParseErrorKind::UnsupportedPseudoClassOrElement,
+            ))
         }
     }
 }
@@ -196,8 +190,6 @@ pub enum PseudoClass {
 }
 
 impl NonTSPseudoClass for PseudoClass {
-    type Impl = KuchikiSelectors;
-
     fn is_active_or_hover(&self) -> bool {
         matches!(*self, PseudoClass::Active | PseudoClass::Hover)
     }
@@ -249,8 +241,6 @@ impl ToCss for PseudoElement {
 }
 
 impl selectors::parser::PseudoElement for PseudoElement {
-    type Impl = KuchikiSelectors;
-
     fn parses_as_element_backed(&self) -> bool {
         match *self {
             PseudoElement::FirstChild => true,
@@ -475,10 +465,9 @@ impl Selectors {
     /// Compile a list of selectors. This may fail on syntax errors or unsupported selectors.
     #[inline]
     pub fn compile(s: &str) -> Result<Selectors, ()> {
-        let mut input = cssparser::ParserInput::new(s);
         match SelectorList::parse(
             &KuchikiParser,
-            &mut cssparser::Parser::new(&mut input),
+            &mut cssparser::Parser::new(s),
             ParseRelative::No,
         ) {
             Ok(list) => Ok(Selectors(

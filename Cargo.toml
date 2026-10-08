@@ -17,13 +17,13 @@ edition = "2024"
 name = "kuchikikiki"
 
 [dependencies]
-cssparser = "0.37.0"
-html5ever = "0.40.0"
-selectors = "0.40"
-indexmap = "2.14.0"
+cssparser = "0.38.0"
+html5ever = "0.40.1"
+selectors = "0.41"
+indexmap = "2.14.2"
 precomputed-hash = "0.1.1"
 crc = "3.4.0"
-bitflags = "2.11.1"
+bitflags = "2.13.2"
 
 [dev-dependencies]
 tempfile = "=3.27.0"
