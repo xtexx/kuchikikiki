@@ -19,7 +19,7 @@ name = "kuchikikiki"
 [dependencies]
 cssparser = "0.38.0"
 html5ever = "0.40.1"
-selectors = "0.41"
+selectors = "0.42"
 indexmap = "2.14.2"
 precomputed-hash = "0.1.1"
 crc = "3.4.0"
